@@ -8,6 +8,8 @@ ENCRYPTED_SECRET="/conf/secret.encrypted"
 
 pcscd --foreground > /dev/null 2>&1 &
 
+echo "Touch the Yubikey to boot." >&2
+
 SECRET_DECRYPTED=`mktemp`
 openssl rsautl -engine pkcs11 -keyform engine -decrypt -inkey 3 -in $ENCRYPTED_SECRET -out $SECRET_DECRYPTED 1>&2
 
@@ -16,6 +18,7 @@ RESULT=$?
 if [ $RESULT -eq 0 ];
 then
   cat $SECRET_DECRYPTED
+  rm $SECRET_DECRYPTED
   echo "Success!" >&2
   exit
 fi
