@@ -19,6 +19,9 @@ copy_exec /lib/x86_64-linux-gnu/libusb-1.0.so.0
 #OpenSSL binary
 copy_exec /usr/bin/openssl
 
+#ykinfo binary
+copy_exec /usr/bin/ykinfo
+
 #OpenSSL configuration
 cp /usr/share/verysecureboot/engine.conf "${DESTDIR}/conf/openssl_engine.conf"
 
