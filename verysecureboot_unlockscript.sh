@@ -14,7 +14,7 @@ plymouth_present()
 message()
 {
 	if plymouth_present; then
-		plymouth message --text="$*" >&2 &
+		plymouth message --text="$*" > /dev/null 2>&1 &
 	else
 	        echo "$@" >&2
 	fi
@@ -49,11 +49,11 @@ fi
 message "Touch the Yubikey to boot."
 
 SECRET_DECRYPTED=`mktemp`
-openssl rsautl -engine pkcs11 -keyform engine -decrypt -inkey 3 -in $ENCRYPTED_SECRET -out $SECRET_DECRYPTED 1>&2 &
+openssl rsautl -engine pkcs11 -keyform engine -decrypt -inkey 3 -in $ENCRYPTED_SECRET -out $SECRET_DECRYPTED > /dev/null 2>&1
 
 RESULT=$?
 
-if [ $RESULT -ne 1 ];
+if [ $RESULT -ne 0 ];
 then
 	message "Failed to decrypt! Going into recovery mode."
 	askpassword
