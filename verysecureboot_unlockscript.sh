@@ -19,6 +19,17 @@ ENCRYPTED_SECRET="/conf/secret.encrypted"
 
 pcscd --foreground > /dev/null 2>&1
 
+ykinfo -q -H > /dev/null 2>&1
+
+RESULT=$?
+
+if [ $RESULT -eq 1 ];
+then
+	message "Yubikey not present."
+	/lib/cryptsetup/askpass "Unlocking the disk fallback $CRYPTTAB_SOURCE ($CRYPTTAB_NAME)\nEnter passphrase: "
+	exit
+fi
+
 message "Touch the Yubikey to boot."
 
 SECRET_DECRYPTED=`mktemp`
